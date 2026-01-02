@@ -8,11 +8,12 @@
         /* --- 1. CONFIGURATION GLOBALE --- */
         :root {
             --glow: #ffffff;
-            --bg: #050505;
+            --bg-body: #000000;      /* Fond final (Noir pur) */
+            --bg-intro: #1a1a1a;     /* Fond intro (Gris foncé pour contraste effet TV) */
         }
 
         body {
-            background-color: var(--bg);
+            background-color: var(--bg-body);
             color: var(--glow);
             font-family: 'Courier New', Courier, monospace;
             margin: 0;
@@ -25,7 +26,6 @@
         }
 
         /* --- 2. TEXTURES & GLOW --- */
-        /* Lignes TV (Scanlines) - Toujours au dessus de tout */
         .scanlines {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -36,7 +36,6 @@
             z-index: 999;
         }
 
-        /* Effet Glow Blanc */
         .glow-text {
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.5);
         }
@@ -50,49 +49,43 @@
         #intro-layer {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #000;
+            /* C'est ici le GRIS FONCÉ pour que l'effet TV se voie sur le noir */
+            background-color: var(--bg-intro); 
             z-index: 500;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transform-origin: center;
+            justify-content: center; /* Centre verticalement */
+            align-items: center;     /* Centre horizontalement */
         }
 
         /* Le Loader */
         .spinner {
-            width: 40px; height: 40px;
-            border: 3px solid #333;
-            border-top: 3px solid #fff;
+            width: 50px; height: 50px;
+            border: 4px solid #333;
+            border-top: 4px solid #fff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+            margin-bottom: 25px;
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
         }
 
-        /* L'étape de Validation */
-        #validation-step {
-            display: none; /* Caché au début */
+        /* Texte de Validation */
+        #validation-text {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
             text-align: center;
-        }
-        
-        .check-icon {
-            font-size: 3rem;
-            display: block;
-            margin-bottom: 15px;
-            text-shadow: 0 0 15px #fff;
+            min-height: 1.5em; /* Garde la place pour éviter les sauts */
         }
 
         /* --- 4. ANIMATION "TV ÉTEINTE" (CRT OFF) --- */
-        /* Cette classe sera ajoutée via JS pour faire disparaître l'intro */
         .crt-off-anim {
-            animation: crt-turn-off 0.6s cubic-bezier(0.23, 1.00, 0.32, 1.00) forwards;
+            animation: crt-turn-off 0.7s cubic-bezier(0.23, 1.00, 0.32, 1.00) forwards;
         }
 
         @keyframes crt-turn-off {
-            0% { transform: scale(1, 1); opacity: 1; filter: brightness(1); }
-            40% { transform: scale(1, 0.005); opacity: 1; filter: brightness(2); } /* Écrase en ligne */
-            100% { transform: scale(0, 0); opacity: 0; filter: brightness(5); } /* Disparaît en point */
+            0% { transform: scale(1, 1); opacity: 1; filter: brightness(1); background-color: var(--bg-intro); }
+            40% { transform: scale(1, 0.005); opacity: 1; filter: brightness(2); background-color: #555; } /* Ligne grise visible */
+            100% { transform: scale(0, 0); opacity: 0; filter: brightness(5); background-color: #fff; } /* Point final */
         }
         
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -104,23 +97,21 @@
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(5px);
-            opacity: 0; /* Cachée par défaut */
-            transition: opacity 1.5s ease; /* Apparition douce après l'effet TV */
+            opacity: 0; 
+            transition: opacity 2s ease; /* Apparition très douce */
         }
 
         .card-visible { opacity: 1; }
 
-        /* Styles internes de la carte */
         .header-row { display: flex; justify-content: space-between; border-bottom: 1px solid #555; padding-bottom: 10px; font-size: 0.7rem; margin-bottom: 20px;}
         .amount-row { text-align: center; margin: 30px 0; }
         .amount { font-size: 3.5rem; font-weight: bold; }
-        .code-display { background: rgba(255,255,255,0.1); padding: 15px; text-align: center; font-size: 1.2rem; letter-spacing: 2px; margin-top: 15px; cursor: pointer; border: 1px dashed #555; }
+        .code-display { background: rgba(255,255,255,0.1); padding: 15px; text-align: center; font-size: 1.2rem; letter-spacing: 2px; margin-top: 15px; cursor: pointer; border: 1px dashed #555; transition: all 0.3s; }
         .code-display:active { background: #fff; color: #000; }
         
-        /* Image Perso (Optionnel) */
-        .hack-image-box { border: 1px solid #fff; margin: 15px 0; position: relative; overflow: hidden; }
-        .hack-image-box img { width: 100%; display: block; filter: grayscale(100%) contrast(1.1); }
-        .hack-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.3) 50%); background-size: 100% 4px; pointer-events: none; }
+        /* Curseur clignotant */
+        .cursor { animation: blink 1s infinite; font-weight: bold; }
+        @keyframes blink { 50% { opacity: 0; } }
 
     </style>
 </head>
@@ -130,15 +121,14 @@
 
     <div id="intro-layer">
         
-        <div id="loader-step" style="text-align:center;">
+        <div id="loader-step" style="display:flex; flex-direction:column; align-items:center;">
             <div class="spinner"></div>
-            <div class="glow-text" style="font-size: 0.9rem; letter-spacing: 1px;">CHECKING AUTHORIZATION...</div>
+            <div class="glow-text" style="font-size: 0.8rem; letter-spacing: 3px; margin-top: 10px;">CHECKING AUTHORIZATION</div>
         </div>
 
-        <div id="validation-step">
-            <div class="check-icon glow-text">✓</div>
-            <div style="font-size: 1rem; letter-spacing: 2px;">
-                ID VALIDATED : <span id="typewriter-target" class="glow-text"></span><span class="cursor">_</span>
+        <div id="text-step" style="display:none;">
+            <div class="glow-text">
+                <span id="typewriter-target"></span><span class="cursor">_</span>
             </div>
         </div>
     </div>
@@ -157,13 +147,13 @@
 
         <div style="margin-top: 30px;">
             <span style="font-size: 0.7rem; opacity: 0.6; display: block;">POUR L'AGENT:</span>
-            <div style="font-size: 1.2rem; margin-bottom: 20px;">NOM DU DESTINATAIRE</div>
+            <div style="font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 1px;">PRENOM</div>
 
             <span style="font-size: 0.7rem; opacity: 0.6; display: block;">CODE D'ACCÈS:</span>
             <div class="code-display glow-text" onclick="copyCode()">
                 XMAS-2025-SLMVX
             </div>
-            <div id="copy-msg" style="text-align:center; font-size:0.6rem; opacity:0; transition:opacity 0.3s; margin-top:5px;">COPIÉ !</div>
+            <div id="copy-msg" style="text-align:center; font-size:0.6rem; opacity:0; transition:opacity 0.3s; margin-top:10px;">COPIÉ DANS LE PRESSE-PAPIER</div>
         </div>
     </div>
 
@@ -171,16 +161,20 @@
     <script>
         /* --- SCRIPT DE SÉQUENCAGE --- */
         
+        // Texte complet à écrire
+        const textToType = "ID VALIDATED : SLMVX";
+
         window.onload = function() {
-            // 1. On attend 1.5 secondes (Roue de chargement)
+            // 1. Roue tourne pendant 1.5 sec
             setTimeout(function() {
-                // On cache le loader
+                // On cache la roue
                 document.getElementById('loader-step').style.display = 'none';
-                // On affiche la zone de validation
-                document.getElementById('validation-step').style.display = 'block';
                 
-                // 2. On lance l'écriture lettre par lettre de "SLMVX"
-                typeWriter("SLMVX", 0);
+                // On affiche le conteneur de texte (vide pour l'instant)
+                document.getElementById('text-step').style.display = 'block';
+                
+                // 2. On lance l'écriture
+                typeWriter(textToType, 0);
 
             }, 1500);
         };
@@ -188,26 +182,25 @@
         function typeWriter(text, i) {
             if (i < text.length) {
                 document.getElementById("typewriter-target").innerHTML += text.charAt(i);
-                // Vitesse de frappe (100ms par lettre)
-                setTimeout(function() { typeWriter(text, i + 1); }, 150);
+                // Vitesse de frappe (50ms par lettre = rapide et technique)
+                setTimeout(function() { typeWriter(text, i + 1); }, 50);
             } else {
-                // 3. Quand l'écriture est finie, on attend une mini pause (0.5s)
-                setTimeout(triggerCrtOff, 500);
+                // 3. FIN DE L'ÉCRITURE -> ON ATTEND 2 SECONDES
+                setTimeout(triggerCrtOff, 2000);
             }
         }
 
         function triggerCrtOff() {
-            // 4. On ajoute la classe d'animation "TV éteinte" au layer d'intro
+            // 4. Animation TV qui s'éteint
             const intro = document.getElementById('intro-layer');
             intro.classList.add('crt-off-anim');
 
-            // 5. Juste après, on fait apparaître la carte doucement
+            // 5. Apparition de la carte
             setTimeout(function() {
                 document.getElementById('main-card').classList.add('card-visible');
-            }, 400); // Se lance pendant que l'écran s'éteint
+            }, 600); 
         }
 
-        // Fonction Copier-Coller simple
         function copyCode() {
             navigator.clipboard.writeText("XMAS-2025-SLMVX");
             document.getElementById('copy-msg').style.opacity = 1;
