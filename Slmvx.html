@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SECURE LINK</title>
+    <title>RETINATTRAKTIV ACCESS</title>
     <style>
         /* --- 1. CONFIGURATION GLOBALE --- */
         :root {
             --glow: #ffffff;
-            --bg-color: #1a1a1a; /* Gris foncé unifié */     
+            --bg-color: #000000; /* Gris foncé unifié */     
         }
 
         body {
@@ -152,8 +152,11 @@
             <div style="font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 1px;">SLMVX</div>
 
             <span style="font-size: 0.7rem; opacity: 0.6; display: block;">FROM :</span>
+            <div style="font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 1px;">TOERA22</div>
+
+            <span style="font-size: 0.7rem; opacity: 0.6; display: block;">MESSAGE :</span>
             <div class="code-display glow-text" onclick="copyCode()">
-                TOERA22
+                PETIT MESSAGE PERSO ICI
             </div>
             <div id="copy-msg" style="text-align:center; font-size:0.6rem; opacity:0; transition:opacity 0.3s; margin-top:10px;">COPIÉ DANS LE PRESSE-PAPIER</div>
         </div>
@@ -181,7 +184,7 @@
                 setTimeout(function() { typeWriter(text, i + 1); }, 50);
             } else {
                 // 3. Fin écriture -> Pause de 2 secondes
-                setTimeout(triggerCrtOff, 2000);
+                setTimeout(triggerCrtOff, 1500);
             }
         }
 
